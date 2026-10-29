@@ -1,23 +1,78 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = () => {
+    if (!fname.trim() || !lname.trim() || !email.trim()) {
+      return;
+    }
+
+    setUsers((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        fname,
+        lname,
+        email,
+        submitCount: 1,
+      },
+    ]);
+
+    setFname("");
+    setLname("");
+    setEmail("");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <table border={2} style={{margin:  "16px"}}>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Submission Count</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.fname}</td>
+              <td>{user.lname}</td>
+              <td>{user.email}</td>
+              <td>{user.submitCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <input
+        placeholder="First Name"
+        value={fname}
+        onChange={(e) => setFname(e.target.value)}
+      />
+
+      <input
+        placeholder="Last Name"
+        value={lname}
+        onChange={(e) => setLname(e.target.value)}
+      />
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 }
